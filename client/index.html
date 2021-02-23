@@ -1,0 +1,138 @@
+<!Doctype html>
+<html lang="en" xmlns:https="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/main.css">
+    <title>REST API</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app" v-cloak>
+    <navbar class="p-0"></navbar>
+
+    <div class="imageContainer">
+        <div class="searchImage">
+            <form class="search" @submit.prevent="searchArticle">
+                <label for="searchMessage"></label>
+                <input class="input" id="searchMessage" placeholder="Search..."/>
+                <input class="submit" value=" " type="submit"/>
+            </form>
+        </div>
+        <div><img class="bodyimage"
+                  src="https://lookw.ru/8/809/1476139769-wallpaper-new-york-bay-met-dvdbash-wordpress.jpg"
+                  width="1920" height="200" alt=""></div>
+    </div>
+
+    <div class="containerButton">
+        <button class="btn" :style="{color: currentPageFlag == 1? 'red':'black',
+         borderBottomColor: currentPageFlag == 1? 'red': 'white'}" @click="currentPageFlag = 1">
+            Create
+        </button>
+        <button class="btn" :style="{color: currentPageFlag == 2? 'red':'black',
+         borderBottomColor: currentPageFlag == 2? 'red': 'white'}" @click="currentPageFlag = 2">
+            Top-10
+        </button>
+        <button class="btn" :style="{color: currentPageFlag == 3? 'red':'black',
+         borderBottomColor: currentPageFlag == 3? 'red': 'white'}" @click="currentPageFlag = 3">
+            All
+        </button>
+        <button class="btn" :style="{color: currentPageFlag == 4? 'red':'black',
+         borderBottomColor: currentPageFlag == 4? 'red': 'white'}" @click="currentPageFlag = 3">
+            About me
+        </button>
+    </div>
+    <div v-if="currentPageFlag == 1">
+        <div>
+            <form class="newArticleform" @submit.prevent="createArticle">
+                <h2 style="font-family: unset;margin: 20px 0 20px 16px">Write your article here</h2>
+                <div class="form-group ml-3 mr-3">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" required v-model="form.title"
+                           placeholder="Title">
+                </div>
+                <div class="ml-3 mr-3">
+                    <label style="width: 100%" for="description">Article Text</label>
+                    <textarea id="description" type="text" class="form-control" name="message" required
+                              placeholder="Article description"
+                              style="resize:vertical; width: 100%; min-height: 150px" v-model="form.description"
+                    ></textarea>
+
+                </div>
+                <div class="form-group ml-3 mr-3">
+                    <label for="date" style="margin-top: 10px">Date of article registration</label>
+                    <input type="date" class="datepicker" max="2022-01-09" id="date" name="date" required
+                           style="display: block" v-model="form.date">
+                </div>
+                <div class="ml-3 mt-3 mr-3">
+                    <label></label>
+                    <input type="file" id="files" ref="files" multiple v-on:change="handleFilesUpload()"/>
+                </div>
+
+                <button style="margin:25px 20px" class="btn btn-primary" type="submit">Create</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="containerArticles" v-else-if="currentPageFlag == 2">
+            <h2 style="font-family: unset;margin: 20px 0 20px 16px">All Articles</h2>
+            <div class="articlesList" v-for="article in articles">
+                <div class="article">
+                    <div class="article-image">ffffffffffff</div>
+                    <div class="article-info">
+                        <div>{{article.title}}</div>
+                        <div>sjgnaijoas2</div>
+                        <div>sjgnaijoas3</div>
+
+                    </div>
+                </div>
+                <div class="item2">dddddddddddd</div>
+                <div class="item2">aaaaaaaaaaaa</div>
+                <div class="item2">cccccccccccc</div>
+            </div>
+    </div>
+
+    <div v-else-if="currentPageFlag == 3">
+        <padeallarticles></padeallarticles>
+    </div>
+
+    <div v-if="articles.length">
+        <div class="card mb-3" v-for="article in articles">
+            <div class="card-body">
+                <h5 class="card-title" :style="{color: article.marked ? 'red' : 'black'}">{{article.title}}</h5>
+                <p class="card-text">{{article.description}} + {{article.date}}</p>
+                <button class="btn btn-primary" @click="markArticle(article.id)">Отметить</button>
+                <button class="btn btn-danger" @click="removeArticle(article.id)">Удалить</button>
+            </div>
+        </div>
+    </div>
+    <p v-else>Контактов пока нет</p>
+    <hr>
+    <footer>
+        <div class="footer-container">
+            <span class="footer-container-item1">Формаго Д. М.  </span>
+            <span class="footer-container-item1">email: dimaformago281@gmail.com</span>
+            <span class="footer-container-item1">phone: +375297858263</span>
+            <span class="footer-container-item2"> Разнообразный и богатый опыт выбранный нами инновационный путь обеспечивает актуальность форм воздействия. Практический опыт показывает, что сложившаяся структура организации требует от нас системного анализа модели развития. Значимость этих проблем настолько очевидна, что рамки и место обучения кадров позволяет выполнить важнейшие задания по разработке существующих финансовых и административных условий.</span>
+            <span>&copy; Copyright 2021, BSUIR</span>
+        </div>
+    </footer>
+</div>
+<script src="https://unpkg.com/vue@next"></script>
+<script type="module" src="frontend.js"></script>
+</body>
+</html>
